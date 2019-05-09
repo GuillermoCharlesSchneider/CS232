@@ -1,0 +1,55 @@
+/*
+f 
+is control bits
+
+000: out = a AND b
+
+001: out = a OR b
+
+010: out = a + b
+
+011: not used
+
+100: out = a AND NOT(b)
+
+101: out = a OR NOT(b)
+
+110: out = a - b
+
+111: SLT (SET LESS THAN) out is 1 if a < b else 0
+
+*/
+
+
+
+
+
+
+
+CHIP MiniALU {
+   
+ IN a[16], b[16], f[3];  // 16-bit inputs and control bits   
+
+   
+ OUT out[16]; // 16-bit output
+
+    
+ PARTS:
+
+And16(a=a,b=b,out=aANDb);
+Or16(a=a,b=b,out=aORb);
+Add16(a=a,b=b,out=aPLUSb);
+
+Not16(in=b,out=NOTb);
+And16(a=a,b=NOTb,out=aANDnotb);
+Or16(a=a,b=NOTb,out=aORnotb);
+Add16(a=a,b=NOTb,out=aMINUSb);
+
+Xor16(a=b,b=a,out=xorAB);
+And16(a=xorAB,b=b,out=SLT);
+
+Mux8Way16(a=aANDb,b=aORb,c=aPLUSb,d=false,e=aANDnotb,f=aORnotb,g=aMINUSb,h=SLT,sel=f,out=out);
+
+
+ 
+}
